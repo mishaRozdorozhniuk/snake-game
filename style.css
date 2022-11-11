@@ -1,0 +1,31 @@
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    max-width: 300px;
+}
+
+.snake-cell {
+    height: 50px;
+    width: 50px;
+    border: 1px solid black;
+    cursor: none
+}
+
+.apple {
+    background-color: green
+}
+
+.apple-done {
+    background-color: white;
+    border: 1px solid black;
+    height: 50px;
+    width: 50px;
+    cursor: none
+}
+
+.snake-red {
+    height: 50px;
+    width: 50px;
+    background-color: red;
+    cursor: none
+}
