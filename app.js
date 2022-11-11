@@ -51,13 +51,12 @@ function UP() {
     let CurrentRow = M.at(MLastRowIndex)
     let previousRow = M.at(MLastRowIndex + 1)
     let currentCell = CurrentRow.at(MLastCellIndex - 1) 
+    let currentIndexOfCellInTheRow = CurrentRow.indexOf(currentCell)
 
     snakeFillCells.push(currentCell)
 
     document.getElementById(currentCell).setAttribute("class", "snake-red")
-    previousRow.map(el => {
-        document.getElementById(el).setAttribute("class", "apple-done")
-    })
+    document.getElementById(previousRow[currentIndexOfCellInTheRow]).setAttribute("class", "apple-done")
 
     if(currentCell == currentRandomAppleCell && currentRandomAppleCell !== null) {
         document.getElementById(currentRandomAppleCell).setAttribute("class", "snake-red")
@@ -71,15 +70,15 @@ function DOWN() {
     MLastRowIndex += 1
     let CurrentRow = M.at(MLastRowIndex)
     let previousDownRow = M.at(MLastRowIndex - 1)
-    console.log(previousDownRow);
     let currentCell = CurrentRow.at(MLastCellIndex - 1)
+    let currentIndexOfCellInTheRow = CurrentRow.indexOf(currentCell)
+
+    console.log(previousDownRow[currentIndexOfCellInTheRow]);
 
     snakeFillCells.push(currentCell)
    
     document.getElementById(currentCell).setAttribute("class", "snake-red")
-    previousDownRow.map((el, index) => {
-        return document.getElementById(el).setAttribute("class", "apple-done")
-    })
+    document.getElementById(previousDownRow[currentIndexOfCellInTheRow]).setAttribute("class", "apple-done")
 
     if(currentCell == currentRandomAppleCell && currentRandomAppleCell !== null) {
         document.getElementById(currentRandomAppleCell).setAttribute("class", "snake-red")
