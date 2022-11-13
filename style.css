@@ -4,19 +4,24 @@
     box-sizing: border-box;
 }
 
+body {
+    background-color: #000;
+}
+
 main {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     max-width: 300px;
     margin: auto;
-    margin-top: 10%;
+    margin-top: 15%;
 }
 
 .snake-cell {
     height: 50px;
     width: 50px;
     border: 1px solid black;
-    cursor: none
+    cursor: none;
+    background-color: #1f1d1d;
 }
 
 .apple {
@@ -24,7 +29,7 @@ main {
 }
 
 .apple-done {
-    background-color: white;
+    background-color: #1f1d1d;
     border: 1px solid black;
     height: 50px;
     width: 50px;
@@ -36,4 +41,20 @@ main {
     width: 50px;
     background-color: red;
     cursor: none
+}
+
+.score {
+    color: rgb(255, 255, 255);
+    position: absolute;
+    background-color: red;
+    padding: 6px 40px;
+    border-radius: 2px;
+    margin-top: 60px;
+    font-weight: bold;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

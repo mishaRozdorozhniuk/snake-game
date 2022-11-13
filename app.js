@@ -1,13 +1,23 @@
 let M = [
-            [0, 1, 2, 3, 4, 5],
-            [6, 7, 8, 9, 10, 11],
-            [12, 13, 14, 15, 16, 17],
-            [18, 19, 20, 21, 22, 23],
-            [24, 25, 26, 27, 28, 29],
-            [30, 31, 32, 33, 34, 35]
-        ]
+    [0, 1, 2, 3, 4, 5],
+    [6, 7, 8, 9, 10, 11],
+    [12, 13, 14, 15, 16, 17],
+    [18, 19, 20, 21, 22, 23],
+    [24, 25, 26, 27, 28, 29],
+    [30, 31, 32, 33, 34, 35]
+]
 
 const main = document.createElement("main")
+
+let currentRowForRight
+
+let score = 0
+
+let snakeLength = 0
+
+let previousRightCell
+
+let snakeValues = []
 
 let rangeOfApple = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
 
@@ -37,6 +47,8 @@ let snakeFillCells = []
 let generate
 let currentRandomAppleCell = 5
 
+let scoreTag = document.querySelector(".score")
+
 function generateApple() {
     let R = rangeOfApple.filter(availableCell => availableCell !== snakeFillCells[0])
     let currentRandomAppleCell = R[Math.floor(R.length * Math.random())];
@@ -45,12 +57,21 @@ function generateApple() {
     return currentRandomAppleCell
 }
 
+function increaseScore() {
+    score += 1
+    scoreTag.innerText = score
+    document.body.append(scoreTag);
+    document.getElementById(currentRandomAppleCell).setAttribute("class", "snake-red")
+    generateApple()
+    currentRandomAppleCell = generate
+}
+
 function UP() {
     snakeFillCells = []
     MLastRowIndex -= 1
     let CurrentRow = M.at(MLastRowIndex)
     let previousRow = M.at(MLastRowIndex + 1)
-    let currentCell = CurrentRow.at(MLastCellIndex - 1) 
+    let currentCell = CurrentRow.at(MLastCellIndex - 1)
     let currentIndexOfCellInTheRow = CurrentRow.indexOf(currentCell)
 
     snakeFillCells.push(currentCell)
@@ -58,11 +79,12 @@ function UP() {
     document.getElementById(currentCell).setAttribute("class", "snake-red")
     document.getElementById(previousRow[currentIndexOfCellInTheRow]).setAttribute("class", "apple-done")
 
-    if(currentCell == currentRandomAppleCell && currentRandomAppleCell !== null) {
-        document.getElementById(currentRandomAppleCell).setAttribute("class", "snake-red")
-        generateApple()
-        currentRandomAppleCell = generate
-    } 
+    if (currentCell == currentRandomAppleCell && currentRandomAppleCell !== null) {
+        increaseScore()
+    }
+
+    console.log(snakeValues);
+    console.log(currentRowForRight);
 }
 
 function DOWN() {
@@ -73,18 +95,14 @@ function DOWN() {
     let currentCell = CurrentRow.at(MLastCellIndex - 1)
     let currentIndexOfCellInTheRow = CurrentRow.indexOf(currentCell)
 
-    console.log(previousDownRow[currentIndexOfCellInTheRow]);
-
     snakeFillCells.push(currentCell)
-   
+
     document.getElementById(currentCell).setAttribute("class", "snake-red")
     document.getElementById(previousDownRow[currentIndexOfCellInTheRow]).setAttribute("class", "apple-done")
 
-    if(currentCell == currentRandomAppleCell && currentRandomAppleCell !== null) {
-        document.getElementById(currentRandomAppleCell).setAttribute("class", "snake-red")
-        generateApple()
-        currentRandomAppleCell = generate
-    } 
+    if (currentCell === currentRandomAppleCell && currentRandomAppleCell !== null) {
+        increaseScore()
+    }
 }
 
 function LEFT() {
@@ -93,49 +111,74 @@ function LEFT() {
     let currentLeftRow = M.at(MLastRowIndex)
     let currentLeftCell = currentLeftRow.at(MLastCellIndex - 1)
     snakeFillCells.push(currentLeftCell)
-    
+
     document.getElementById(currentLeftCell).setAttribute("class", "snake-red")
     document.getElementById(currentLeftCell + 1).setAttribute("class", "apple-done")
 
-    if(currentLeftCell == currentRandomAppleCell && currentRandomAppleCell !== null) {
-        document.getElementById(currentRandomAppleCell).setAttribute("class", "snake-red")
-        generateApple()
-        currentRandomAppleCell = generate
-        
-    } 
+    if (currentLeftCell == currentRandomAppleCell && currentRandomAppleCell !== null) {
+        increaseScore()
+    }
 }
 
 function RIGHT() {
     snakeFillCells = []
     MLastCellIndex += 1
+
     let currentRightRow = M.at(MLastRowIndex)
     let currentRightCell = currentRightRow.at(MLastCellIndex - 1)
-    snakeFillCells.push(currentRightCell)
 
+    snakeFillCells.push(currentRightCell)
     document.getElementById(currentRightCell).setAttribute("class", "snake-red")
     document.getElementById(currentRightCell - 1).setAttribute("class", "apple-done")
 
-    if(currentRightCell == currentRandomAppleCell && currentRandomAppleCell !== null) {
+    let previous = currentRightRow.indexOf(currentRightCell)
+    snakeValues.push(previous - 1)
+    let snakeValuesToColor = snakeValues.slice(-1)
+
+    let elInRow = currentRightRow.at(snakeValuesToColor[0])
+    document.getElementById(elInRow).setAttribute("class", "snake-red")
+
+    if (currentRightCell !== currentRandomAppleCell && snakeValues.length > 1) {
+        snakeValues.map(el => {
+            let elNotIndex = currentRightRow.at(el)
+            if (elNotIndex !== elInRow) {
+                document.getElementById(elNotIndex).setAttribute("class", "apple-done")
+            } else {
+                return
+            }
+        })
+    }
+
+    if (snakeValues.length >= 2) {
+        snakeValues = snakeValues.slice(-1)
+    }
+
+    currentRowForRight = currentRightRow
+
+    if (currentRightCell === currentRandomAppleCell && currentRandomAppleCell !== null) {
+        document.getElementById(elInRow - 1).setAttribute("class", "apple-done")
+        score += 1
+        scoreTag.innerText = score
+        document.body.append(scoreTag);
         document.getElementById(currentRandomAppleCell).setAttribute("class", "snake-red")
         generateApple()
         currentRandomAppleCell = generate
-    } 
+    }
 }
 
 document.onkeydown = function(e) {
     switch (e.keyCode) {
         case 37:
-                LEFT()
+            LEFT()
             break;
         case 38:
-                UP()
+            UP()
             break;
         case 39:
-                RIGHT()
+            RIGHT()
             break;
         case 40:
-                DOWN()
+            DOWN()
             break;
     }
 };
-
