@@ -128,9 +128,7 @@ function RIGHT() {
     document.getElementById(currentRightCell).setAttribute("class", "snake-red")
     document.getElementById(currentRightCell - 1).setAttribute("class", "apple-done")
 
-    // Move snake
-    // for one cell more when score 1
-
+    // Move snake for one cell more when score 1
 
     // let previousForOne = currentRightRow.indexOf(currentRightCell)
     // snakeValues.push(previousForOne - 1)
@@ -158,14 +156,9 @@ function RIGHT() {
         if (snakeValuesToColor.length === snakeValues.length) {
             snakeValuesToColor.map(snake => {
                 let elInRow = currentRightRow.at(snake)
-
                 document.getElementById(elInRow).setAttribute("class", "snake-red")
-                if (snakeValues.length === 1) {
-                    document.getElementById(elInRow - 3).setAttribute("class", "apple-done") // elInRow - 3 !!!!
-                }
-                if (elInRow - 3 === 0) {
-                    document.getElementById(0).setAttribute("class", "apple-done")
-                }
+                snakeValues.length === 1 && document.getElementById(elInRow - 3).setAttribute("class", "apple-done")
+                elInRow - 3 === 0 && document.getElementById(0).setAttribute("class", "apple-done")
             })
         }
     }
