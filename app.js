@@ -7,9 +7,20 @@ let M = [
     [30, 31, 32, 33, 34, 35]
 ]
 
+/*
+[0, 1, 2, 3, 4, 5],
+[6, 7, 8, 9, 10, 11],
+[12, 13, 14, 15, 16, 17],
+[18, 19, 20, 21, 22, 23],
+[24, 25,  26, +, 28, 29],
+[ +,  +,  +,  +, 34, 35]
+*/
+
 const main = document.createElement("main")
 
 let currentRowForRight
+let currentCellForRight
+let snakeValuesToColorRight
 
 let score = 0
 
@@ -73,17 +84,40 @@ function UP() {
     let previousRow = M.at(MLastRowIndex + 1)
     let currentCell = CurrentRow.at(MLastCellIndex - 1)
     let currentIndexOfCellInTheRow = CurrentRow.indexOf(currentCell)
-
+/*
+        let previous = previousRow.indexOf(previousRow[currentIndexOfCellInTheRow])
+        snakeValues.push(previous)
+        let snakeValuesToColor = snakeValues.slice(-1)
+        console.log(snakeValues);
+        console.log(snakeValuesToColor, "snakeValuesToColor");
+        snakeValuesToColor.map(el => {
+            let previousEl = previousRow.at(el)
+            someArr.push(previousEl)
+            someArr = someArr.slice(-1)
+            document.getElementById(someArr[0]).setAttribute("class", "snake-red")
+           // snakeValues.length === 1 && document.getElementById(previousEl  - 1).setAttribute("class", "apple-done")
+        })
+        someArr = []
     snakeFillCells.push(currentCell)
 
-    document.getElementById(currentCell).setAttribute("class", "snake-red")
-    document.getElementById(previousRow[currentIndexOfCellInTheRow]).setAttribute("class", "apple-done")
+    
+*/
+document.getElementById(currentCell).setAttribute("class", "snake-red")
+ document.getElementById(previousRow[currentIndexOfCellInTheRow]).setAttribute("class", "apple-done")
+   // if(currentRowForRight.includes(currentCellForRight)) {
+    //    currentRowForRight.map(el => {
+            
+            
+     //   })
+        //document.getElementById(colorRightCellBeforeGoUp + 1).setAttribute("class", "snake-red")
+        //document.getElementById(colorRightCellBeforeGoUp).setAttribute("class", "apple-done")
+  //  }
+
 
     if (currentCell == currentRandomAppleCell && currentRandomAppleCell !== null) {
         increaseScore()
     }
 }
-
 function DOWN() {
     snakeFillCells = []
     MLastRowIndex += 1
@@ -91,8 +125,6 @@ function DOWN() {
     let previousDownRow = M.at(MLastRowIndex - 1)
     let currentCell = CurrentRow.at(MLastCellIndex - 1)
     let currentIndexOfCellInTheRow = CurrentRow.indexOf(currentCell)
-
-    snakeFillCells.push(currentCell)
 
     document.getElementById(currentCell).setAttribute("class", "snake-red")
     document.getElementById(previousDownRow[currentIndexOfCellInTheRow]).setAttribute("class", "apple-done")
@@ -108,7 +140,6 @@ function LEFT() {
     let currentLeftRow = M.at(MLastRowIndex)
     let currentLeftCell = currentLeftRow.at(MLastCellIndex - 1)
     snakeFillCells.push(currentLeftCell)
-
     document.getElementById(currentLeftCell).setAttribute("class", "snake-red")
     document.getElementById(currentLeftCell + 1).setAttribute("class", "apple-done")
 
@@ -122,18 +153,12 @@ function LEFT() {
                 let elInRow = currentLeftRow.at(snake)
                 document.getElementById(elInRow).setAttribute("class", "snake-red")
                 snakeValues.length === 1 && document.getElementById(elInRow + (score - 1)).setAttribute("class", "apple-done")
-                if(elInRow - 1 === 0 && score <= 2) {
-                    document.getElementById(0).setAttribute("class", "apple-done")
-                    if(snakeValues.length == 2 && score <= 2) {
-                        document.getElementById(0).setAttribute("class", "apple-done") 
-                    }
-                }
                 elInRow - 3 === 0 && document.getElementById(0).setAttribute("class", "apple-done")
                })
         }
         snakeValues = []  
-    } 
-
+    }
+    
     if (currentLeftCell == currentRandomAppleCell && currentRandomAppleCell !== null) {
         increaseScore()
     }
@@ -156,6 +181,8 @@ function RIGHT() {
         let snakeValuesToColor = snakeValues.slice(-score)
             
         if (snakeValuesToColor.length === snakeValues.length) {
+            snakeValuesToColorRight = snakeValuesToColor
+
             snakeValuesToColor.map(snake => {
                 let elInRow = currentRightRow.at(snake)
                 document.getElementById(elInRow).setAttribute("class", "snake-red")
@@ -173,6 +200,7 @@ function RIGHT() {
     } 
 
     currentRowForRight = currentRightRow
+    currentCellForRight = currentRightCell
 
     if (currentRightCell === currentRandomAppleCell && currentRandomAppleCell !== null) {
         increaseScore()
