@@ -128,57 +128,33 @@ function RIGHT() {
     document.getElementById(currentRightCell).setAttribute("class", "snake-red")
     document.getElementById(currentRightCell - 1).setAttribute("class", "apple-done")
 
-    // Move snake for one cell more when score 1
-
-    // let previousForOne = currentRightRow.indexOf(currentRightCell)
-    // snakeValues.push(previousForOne - 1)
-    // let snakeValuesToColorTwo = snakeValues.slice(-1) // slice the value to color white
-    // let elInRowTwo = currentRightRow.at(snakeValuesToColorTwo[0])
-
-    // if (score === 1) {
-    //     document.getElementById(elInRowTwo).setAttribute("class", "snake-red")
-    //     if (currentRightCell !== currentRandomAppleCell && snakeValues.length > 1) {
-    //         snakeValues.map(el => {
-    //             let elNotIndex = currentRightRow.at(el)
-    //             if (elNotIndex !== elInRowTwo) {
-    //                 document.getElementById(elNotIndex).setAttribute("class", "apple-done")
-    //             } else {
-    //                 return
-    //             }
-    //         })
-    //     }
-    // }
     if (score > 1) {
         let previous = currentRightRow.indexOf(currentRightCell)
-
+    
         snakeValues.push(previous - 1)
-        let snakeValuesToColor = snakeValues.slice(-4) // slice the value to color red -4 !!!!
+    
+        let snakeValuesToColor = snakeValues.slice(-score)
+            
         if (snakeValuesToColor.length === snakeValues.length) {
             snakeValuesToColor.map(snake => {
                 let elInRow = currentRightRow.at(snake)
                 document.getElementById(elInRow).setAttribute("class", "snake-red")
-                snakeValues.length === 1 && document.getElementById(elInRow - 3).setAttribute("class", "apple-done")
+                snakeValues.length === 1 && document.getElementById(elInRow - (score - 1)).setAttribute("class", "apple-done")
+                if(elInRow - 1 === 0 && score <= 2) {
+                    document.getElementById(0).setAttribute("class", "apple-done")
+                    if(snakeValues.length == 2 && score <= 2) {
+                        document.getElementById(0).setAttribute("class", "apple-done") 
+                    }
+                }
                 elInRow - 3 === 0 && document.getElementById(0).setAttribute("class", "apple-done")
-            })
+               })
         }
-    }
-
-    if (score > 1) {
         snakeValues = []
-    }
-
-    // if (score === 1) {
-    //     if (snakeValues.length >= 2) {
-    //         snakeValues = snakeValues.slice(-2)
-    //     }
-    // }
+    } 
 
     currentRowForRight = currentRightRow
 
     if (currentRightCell === currentRandomAppleCell && currentRandomAppleCell !== null) {
-        // if (score === 1) {
-        //     document.getElementById(elInRowTwo - 1).setAttribute("class", "apple-done")
-        // }
         increaseScore()
     }
 }
