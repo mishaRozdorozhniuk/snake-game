@@ -112,6 +112,28 @@ function LEFT() {
     document.getElementById(currentLeftCell).setAttribute("class", "snake-red")
     document.getElementById(currentLeftCell + 1).setAttribute("class", "apple-done")
 
+    if (score > 1) {
+        let previous = currentLeftRow.indexOf(currentLeftCell)
+        snakeValues.push(previous + 1)
+        let snakeValuesToColor = snakeValues.slice(-score)
+
+        if (snakeValuesToColor.length === snakeValues.length) {
+            snakeValuesToColor.map(snake => {
+                let elInRow = currentLeftRow.at(snake)
+                document.getElementById(elInRow).setAttribute("class", "snake-red")
+                snakeValues.length === 1 && document.getElementById(elInRow + (score - 1)).setAttribute("class", "apple-done")
+                if(elInRow - 1 === 0 && score <= 2) {
+                    document.getElementById(0).setAttribute("class", "apple-done")
+                    if(snakeValues.length == 2 && score <= 2) {
+                        document.getElementById(0).setAttribute("class", "apple-done") 
+                    }
+                }
+                elInRow - 3 === 0 && document.getElementById(0).setAttribute("class", "apple-done")
+               })
+        }
+        snakeValues = []  
+    } 
+
     if (currentLeftCell == currentRandomAppleCell && currentRandomAppleCell !== null) {
         increaseScore()
     }
@@ -130,9 +152,7 @@ function RIGHT() {
 
     if (score > 1) {
         let previous = currentRightRow.indexOf(currentRightCell)
-    
         snakeValues.push(previous - 1)
-    
         let snakeValuesToColor = snakeValues.slice(-score)
             
         if (snakeValuesToColor.length === snakeValues.length) {
