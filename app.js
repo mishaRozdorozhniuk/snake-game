@@ -53,7 +53,7 @@ let availableCells = []
 let snakeFillCells = []
 
 let generate
-let currentRandomAppleCell = 9
+let currentRandomAppleCell = 5
 
 let scoreTag = document.querySelector(".score")
 
@@ -81,7 +81,6 @@ function coloCurrentAndPreviousCell(curr, prev) {
 
 function UP() {
     snakeFillCells = []
-    elToColorRight = elToColorRight.slice(-score)
     MLastRowIndex -= 1
     let CurrentRow = M.at(MLastRowIndex)
     let previousRow = M.at(MLastRowIndex + 1)
@@ -90,6 +89,7 @@ function UP() {
 
     document.getElementById(currentCell).setAttribute("class", "snake-red")
     document.getElementById(previousRow[currentIndexOfCellInTheRow]).setAttribute("class", "apple-done")
+
     if (score > 1) {
         let previous = previousRow[currentIndexOfCellInTheRow]
         snakeValues.push(previous)
@@ -120,7 +120,30 @@ function DOWN() {
     let currentIndexOfCellInTheRow = CurrentRow.indexOf(currentCell)
 
     document.getElementById(currentCell).setAttribute("class", "snake-red")
-    document.getElementById(previousDownRow[currentIndexOfCellInTheRow]).setAttribute("class", "apple-done")
+    
+    score > 1 
+    ? document.getElementById(previousDownRow[currentIndexOfCellInTheRow] - 1).setAttribute("class", "apple-done")
+    : document.getElementById(previousDownRow[currentIndexOfCellInTheRow]).setAttribute("class", "apple-done")
+
+    if (score > 1) {
+        let previous = previousDownRow[currentIndexOfCellInTheRow]
+        snakeValues.push(previous)
+        let snakeValuesToColor = snakeValues.slice(-score)
+        try {
+            let currentPreviousRow = M.at(MLastRowIndex - score)
+            let currentPreviousCell = currentPreviousRow[currentIndexOfCellInTheRow] + 1
+            if (snakeValuesToColor.length === snakeValues.length) {
+                snakeValuesToColor.map(snake => {
+                    document.getElementById(snake).setAttribute("class", "snake-red")
+                    document.getElementById(currentPreviousCell).setAttribute("class", "apple-done")
+                    snakeValues.length === 1 && document.getElementById(currentPreviousCell - 1).setAttribute("class", "apple-done")
+                })
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        snakeValues = []  
+    }
 
     if (currentCell === currentRandomAppleCell && currentRandomAppleCell !== null) {
         increaseScore()
@@ -147,7 +170,8 @@ function LEFT() {
                 document.getElementById(elInRow).setAttribute("class", "snake-red")
                 snakeValues.length === 1 && document.getElementById(elInRow + (score - 1)).setAttribute("class", "apple-done")
                 elInRow - 3 === 0 && document.getElementById(0).setAttribute("class", "apple-done")
-               })
+                score === 2 && document.getElementById(35).setAttribute("class", "apple-done")
+            })
         }
         snakeValues = []  
     }
@@ -171,8 +195,6 @@ function RIGHT() {
     if (score > 1) {
         let previous = currentRightRow.indexOf(currentRightCell)
         snakeValues.push(previous - 1)
-        console.log(snakeValues);
-
         snakeValuesToColor = snakeValues.slice(-score)
             
         if (snakeValuesToColor.length === snakeValues.length) {
