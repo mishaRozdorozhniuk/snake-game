@@ -9,7 +9,16 @@ let M = [
 
 const main = document.createElement("main")
 
+const gameOver = document.getElementById("game-over")
+const tryAgain = document.createElement("button")
+tryAgain.className = "try-again"
+tryAgain.innerText = "Try Again"
+gameOver.appendChild(tryAgain)
+
+const tryAgainShowBtn = document.getElementById("game-over")
+
 let snakeValuesToColor
+
 let elToColorRight = []
 
 let score = 0
@@ -23,9 +32,8 @@ let snakeValues = []
 let rangeOfApple = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
 
 let idsOfAllFields = []
-let idxOfElIncurrentForRightUp
 
-let gameOver = document.querySelector(".game-over")
+let idxOfElIncurrentForRightUp
 
 M.map((cellArr) => {
     let div = document.createElement("div")
@@ -77,9 +85,21 @@ function coloCurrentAndPreviousCell(curr, prev) {
     document.getElementById(prev).setAttribute("class", "apple-done")
 }
 
+function hideGamaOverModal() {
+    tryAgainShowBtn.addEventListener("click", () => {
+        gameOver.setAttribute("class", "try-again")
+        location.reload(true)
+    })
+}
+
 function UP() {
     snakeFillCells = []
     MLastRowIndex -= 1
+    if(MLastRowIndex < -6) {
+        gameOver.setAttribute("class", "game-over-show")
+        tryAgain.setAttribute("class", "show-button")
+        hideGamaOverModal()
+    }
     let CurrentRow = M.at(MLastRowIndex)
     let previousRow = M.at(MLastRowIndex + 1)
     let currentCell = CurrentRow.at(MLastCellIndex - 1)
@@ -112,6 +132,11 @@ function DOWN() {
     let CurrentRow = M.at(MLastRowIndex)
     let previousDownRow = M.at(MLastRowIndex - 1)
     let currentCell = CurrentRow.at(MLastCellIndex - 1)
+    if(MLastRowIndex > -1) {
+        gameOver.setAttribute("class", "game-over-show")
+        tryAgain.setAttribute("class", "show-button")
+        hideGamaOverModal()
+    }
     let currentIndexOfCellInTheRow = CurrentRow.indexOf(currentCell)
 
     document.getElementById(currentCell).setAttribute("class", "snake-red")
